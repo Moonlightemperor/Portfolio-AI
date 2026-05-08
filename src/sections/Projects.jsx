@@ -73,7 +73,7 @@ const ProjectCard = ({ project }) => {
   const y = useMotionValue(0);
   const mouseXSpring = useSpring(x, { stiffness: 200, damping: 25 });
   const mouseYSpring = useSpring(y, { stiffness: 200, damping: 25 });
-  
+
   const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["4deg", "-4deg"]);
   const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-4deg", "4deg"]);
 
@@ -91,11 +91,11 @@ const ProjectCard = ({ project }) => {
 
   const handleMouseLeave = () => {
     setIsHovered(false);
-    x.set(0); 
+    x.set(0);
     y.set(0);
     if (videoRef.current) {
-        videoRef.current.pause();
-        videoRef.current.currentTime = 0;
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
     }
   };
 
@@ -108,14 +108,14 @@ const ProjectCard = ({ project }) => {
       className="project-card flex-shrink-0 w-full lg:w-[60vw] h-auto lg:h-[78vh] glass-dark rounded-3xl border border-white/10 overflow-hidden flex flex-col lg:flex-row relative group"
     >
       {/* Glow border on hover */}
-      <div 
+      <div
         className="absolute inset-0 rounded-3xl opacity-0 lg:group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-20"
         style={{ boxShadow: `inset 0 0 60px ${project.accent}18, 0 0 40px ${project.accent}08` }}
       />
 
       {/* Media Preview Area */}
       <div className={`w-full lg:w-[45%] h-56 lg:h-full bg-gradient-to-br ${project.imageGradient} relative overflow-hidden flex items-center justify-center flex-shrink-0`}>
-        
+
         {/* Video Background */}
         <video
           ref={videoRef}
@@ -129,7 +129,7 @@ const ProjectCard = ({ project }) => {
         <div className={`absolute inset-0 flex items-center justify-center transition-all duration-500 backdrop-blur-sm z-10 ${isHovered ? 'opacity-0' : 'opacity-100 lg:group-hover:opacity-0'}`}>
           <PlayCircle className="w-14 h-14 text-white drop-shadow-2xl" />
         </div>
-        
+
         <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `linear-gradient(${project.accent}44 1px, transparent 1px), linear-gradient(90deg, ${project.accent}44 1px, transparent 1px)`, backgroundSize: '30px 30px' }} />
         <span className={`relative text-5xl lg:text-7xl font-heading font-bold px-6 text-center transition-all duration-700 ${isHovered ? 'opacity-20 blur-sm' : 'opacity-100'}`} style={{ color: `${project.accent}30`, transform: "translateZ(50px)" }}>
           {project.id.toString().padStart(2, '0')}
@@ -144,7 +144,7 @@ const ProjectCard = ({ project }) => {
             <p className="text-[10px] lg:text-xs tracking-widest uppercase font-medium" style={{ color: project.accent }}>{project.tagline}</p>
           </div>
           <h4 className="text-2xl lg:text-3xl font-bold text-white mb-4 lg:mb-5">{project.title}</h4>
-          
+
           <div className="flex flex-wrap gap-2 mb-6 lg:mb-7">
             {project.techStack.map(tech => (
               <span key={tech} className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] text-gray-300">{tech}</span>
@@ -211,7 +211,7 @@ const Projects = () => {
 
   return (
     <section id="projects" ref={sectionRef} className="relative bg-brand-black z-10 overflow-hidden py-10 lg:py-0">
-      
+
       {/* Header */}
       <div className="px-6 lg:px-20 pt-20 pb-10">
         <motion.p
@@ -234,8 +234,8 @@ const Projects = () => {
       </div>
 
       {/* Track */}
-      <div 
-        ref={trackRef} 
+      <div
+        ref={trackRef}
         className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20 px-6 lg:px-20 pb-24 lg:pb-20 pt-4 w-full lg:w-max"
       >
         {projects.map((project) => (
