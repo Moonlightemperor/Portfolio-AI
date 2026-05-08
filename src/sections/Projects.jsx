@@ -19,6 +19,8 @@ const projects = [
     tagline: "Modern instant-delivery ecosystem",
     accent: "#3b82f6",
     video: "/videos/project1.mp4",
+    liveUrl: "https://blinkit-opal.vercel.app/",
+    githubUrl: "https://github.com/Moonlightemperor",
     imageGradient: "from-blue-900/80 via-blue-950/60 to-black",
     techStack: ["MERN", "Razorpay", "Google OAuth", "JWT", "RBAC"],
     details: [
@@ -34,6 +36,8 @@ const projects = [
     tagline: "Apple-inspired cinematic storytelling",
     accent: "#10B981",
     video: "/videos/project2.mp4",
+    liveUrl: "https://new-15.netlify.app/",
+    githubUrl: "https://github.com/Moonlightemperor",
     imageGradient: "from-emerald-900/80 via-emerald-950/60 to-black",
     techStack: ["Three.js", "GSAP", "React", "WebGL", "Framer Motion"],
     details: [
@@ -49,6 +53,8 @@ const projects = [
     tagline: "Real-time dynamic content platform",
     accent: "#a855f7",
     video: "/videos/project3.mp4",
+    liveUrl: "https://scsdb-eight.vercel.app/",
+    githubUrl: "https://github.com/Moonlightemperor",
     imageGradient: "from-purple-900/80 via-purple-950/60 to-black",
     techStack: ["React", "Redux", "REST API", "Infinite Scroll"],
     details: [
@@ -159,10 +165,10 @@ const ProjectCard = ({ project }) => {
         </div>
 
         <div className="flex flex-col sm:flex-row items-center gap-3 mt-8 pt-6 border-t border-white/10">
-          <a href="#" className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-xs text-brand-black transition-all duration-300 hover:scale-105" style={{ backgroundColor: project.accent }}>
+          <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-xs text-brand-black transition-all duration-300 hover:scale-105" style={{ backgroundColor: project.accent }}>
             <ExternalLink className="w-3.5 h-3.5" /> Live Demo
           </a>
-          <a href="#" className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-white/5 border border-white/10 text-white rounded-full font-semibold text-xs hover:bg-white/10 transition-all duration-300 hover:scale-105">
+          <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-white/5 border border-white/10 text-white rounded-full font-semibold text-xs hover:bg-white/10 transition-all duration-300 hover:scale-105">
             <GithubIcon className="w-3.5 h-3.5" /> GitHub
           </a>
         </div>
