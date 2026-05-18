@@ -67,15 +67,13 @@ const projects = [
 ];
 
 const ProjectCard = ({ project }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const videoRef = useRef(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const mouseXSpring = useSpring(x, { stiffness: 200, damping: 25 });
   const mouseYSpring = useSpring(y, { stiffness: 200, damping: 25 });
-
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["4deg", "-4deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-4deg", "4deg"]);
+  
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["3deg", "-3deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-3deg", "3deg"]);
 
   const handleMouseMove = (e) => {
     if (window.innerWidth < 1024) return;
@@ -83,126 +81,107 @@ const ProjectCard = ({ project }) => {
     x.set((e.clientX - rect.left) / rect.width - 0.5);
     y.set((e.clientY - rect.top) / rect.height - 0.5);
   };
-
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-    if (videoRef.current) videoRef.current.play();
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-    x.set(0);
-    y.set(0);
-    if (videoRef.current) {
-      videoRef.current.pause();
-      videoRef.current.currentTime = 0;
-    }
-  };
+  const handleMouseLeave = () => { x.set(0); y.set(0); };
 
   return (
     <motion.div
       style={{ rotateX: window.innerWidth >= 1024 ? rotateX : 0, rotateY: window.innerWidth >= 1024 ? rotateY : 0, transformStyle: "preserve-3d" }}
       onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="project-card flex-shrink-0 w-full lg:w-[60vw] h-auto lg:h-[78vh] glass-dark rounded-3xl border border-white/10 overflow-hidden flex flex-col lg:flex-row relative group"
+      className="project-card flex-shrink-0 w-full lg:w-[75vw] h-auto lg:h-[75vh] relative group perspective-[2000px]"
     >
-      {/* Glow border on hover */}
-      <div
-        className="absolute inset-0 rounded-3xl opacity-0 lg:group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-20"
-        style={{ boxShadow: `inset 0 0 60px ${project.accent}18, 0 0 40px ${project.accent}08` }}
-      />
+      {/* 3D Bento Container */}
+      <div className="w-full h-full grid grid-cols-1 lg:grid-cols-3 grid-rows-[auto] lg:grid-rows-3 gap-4 lg:gap-6" style={{ transform: "translateZ(30px)", transformStyle: "preserve-3d" }}>
+        
+        {/* Block 1: Main Identity */}
+        <div className="lg:col-span-2 lg:row-span-2 glass-dark rounded-3xl border border-white/10 p-8 lg:p-12 flex flex-col justify-between relative overflow-hidden group/block hover:border-white/20 transition-all duration-500 shadow-xl" style={{ transform: "translateZ(20px)" }}>
+           {/* Abstract Glow */}
+           <div className="absolute -bottom-32 -right-32 w-[30rem] h-[30rem] blur-[120px] rounded-full opacity-20 transition-all duration-1000 group-hover/block:opacity-40 group-hover/block:scale-110" style={{ backgroundColor: project.accent }} />
+           {/* CSS Grid Pattern */}
+           <div className="absolute inset-0 opacity-10 mix-blend-overlay" style={{ backgroundImage: `linear-gradient(${project.accent}44 1px, transparent 1px), linear-gradient(90deg, ${project.accent}44 1px, transparent 1px)`, backgroundSize: '40px 40px' }} />
+           
+           <div className="relative z-10">
+             <div className="flex items-center gap-3 mb-6">
+               <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: project.accent }} />
+               <p className="text-[10px] lg:text-xs tracking-widest uppercase font-medium" style={{ color: project.accent }}>{project.tagline}</p>
+             </div>
+             <h4 className="text-4xl lg:text-6xl xl:text-7xl font-heading font-bold text-white mb-4 leading-[1.1] drop-shadow-2xl">{project.title}</h4>
+           </div>
 
-      {/* Media Preview Area */}
-      <div className={`w-full lg:w-[45%] h-56 lg:h-full bg-gradient-to-br ${project.imageGradient} relative overflow-hidden flex items-center justify-center flex-shrink-0`}>
-
-        {/* Video Background */}
-        <video
-          ref={videoRef}
-          src={project.video}
-          muted
-          loop
-          playsInline
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${isHovered ? 'opacity-100' : 'opacity-0'}`}
-        />
-
-        <div className={`absolute inset-0 flex items-center justify-center transition-all duration-500 backdrop-blur-sm z-10 ${isHovered ? 'opacity-0' : 'opacity-100 lg:group-hover:opacity-0'}`}>
-          <PlayCircle className="w-14 h-14 text-white drop-shadow-2xl" />
+           {/* Giant Background Number */}
+           <span className="absolute top-4 right-8 text-[120px] lg:text-[200px] xl:text-[250px] font-heading font-bold opacity-5 pointer-events-none select-none transition-transform duration-1000 group-hover/block:scale-110" style={{ color: project.accent }}>
+             {project.id.toString().padStart(2, '0')}
+           </span>
         </div>
 
-        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `linear-gradient(${project.accent}44 1px, transparent 1px), linear-gradient(90deg, ${project.accent}44 1px, transparent 1px)`, backgroundSize: '30px 30px' }} />
-        <span className={`relative text-5xl lg:text-7xl font-heading font-bold px-6 text-center transition-all duration-700 ${isHovered ? 'opacity-20 blur-sm' : 'opacity-100'}`} style={{ color: `${project.accent}30`, transform: "translateZ(50px)" }}>
-          {project.id.toString().padStart(2, '0')}
-        </span>
-      </div>
-
-      {/* Case Study Details */}
-      <div className="flex-1 p-6 lg:p-10 flex flex-col justify-between" style={{ transform: "translateZ(20px)" }}>
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: project.accent }} />
-            <p className="text-[10px] lg:text-xs tracking-widest uppercase font-medium" style={{ color: project.accent }}>{project.tagline}</p>
-          </div>
-          <h4 className="text-2xl lg:text-3xl font-bold text-white mb-4 lg:mb-5">{project.title}</h4>
-
-          <div className="flex flex-wrap gap-2 mb-6 lg:mb-7">
+        {/* Block 2: Tech Stack */}
+        <div className="lg:col-span-1 lg:row-span-2 glass-dark rounded-3xl border border-white/10 p-8 lg:p-10 flex flex-col relative overflow-hidden hover:border-white/20 transition-all duration-500 shadow-xl" style={{ transform: "translateZ(30px)" }}>
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/[0.02]" />
+          <h5 className="text-gray-500 text-[10px] lg:text-xs tracking-widest uppercase mb-6 lg:mb-8 relative z-10">Core Architecture</h5>
+          <div className="flex flex-col gap-3 relative z-10">
             {project.techStack.map(tech => (
-              <span key={tech} className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] text-gray-300">{tech}</span>
-            ))}
-          </div>
-
-          <div className="space-y-4 lg:space-y-5">
-            {project.details.map((detail, idx) => (
-              <div key={idx} className="flex gap-3">
-                <detail.icon className="w-3.5 h-3.5 text-gray-500 shrink-0 mt-0.5" />
-                <div>
-                  <h5 className="text-white text-[10px] lg:text-xs font-semibold mb-0.5">{detail.label}</h5>
-                  <p className="text-gray-400 text-[10px] lg:text-xs leading-relaxed">{detail.text}</p>
-                </div>
+              <div key={tech} className="px-5 py-3.5 bg-brand-black/50 border border-white/5 rounded-xl text-xs lg:text-sm text-gray-300 font-mono font-medium hover:bg-white/10 hover:border-white/20 transition-all cursor-default flex items-center gap-3 shadow-md">
+                <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: project.accent }} />
+                {tech}
               </div>
             ))}
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center gap-3 mt-8 pt-6 border-t border-white/10">
-          <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-xs text-brand-black transition-all duration-300 hover:scale-105" style={{ backgroundColor: project.accent }}>
-            <ExternalLink className="w-3.5 h-3.5" /> Live Demo
+        {/* Block 3: Details */}
+        <div className="lg:col-span-2 lg:row-span-1 glass-dark rounded-3xl border border-white/10 p-8 lg:p-10 flex items-center relative overflow-hidden hover:border-white/20 transition-all duration-500 shadow-xl" style={{ transform: "translateZ(10px)" }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 w-full relative z-10">
+            {project.details.slice(0, 2).map((detail, idx) => (
+              <div key={idx} className="flex gap-4 items-start">
+                 <div className="w-10 h-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 shadow-lg">
+                   <detail.icon className="w-4 h-4" style={{ color: project.accent }} />
+                 </div>
+                 <div>
+                   <h5 className="text-white text-sm font-bold mb-2">{detail.label}</h5>
+                   <p className="text-gray-400 text-xs leading-relaxed">{detail.text}</p>
+                 </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Block 4: Actions */}
+        <div className="lg:col-span-1 lg:row-span-1 glass-dark rounded-3xl border border-white/10 p-8 flex flex-col justify-center gap-4 relative overflow-hidden hover:border-white/20 transition-all duration-500 shadow-xl" style={{ transform: "translateZ(40px)" }}>
+          <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-between px-6 py-4 rounded-2xl font-bold text-sm text-brand-black transition-all hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]" style={{ backgroundColor: project.accent }}>
+            <span>Launch Platform</span>
+            <ExternalLink className="w-4 h-4" />
           </a>
-          <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-white/5 border border-white/10 text-white rounded-full font-semibold text-xs hover:bg-white/10 transition-all duration-300 hover:scale-105">
-            <GithubIcon className="w-3.5 h-3.5" /> GitHub
+          <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-between px-6 py-4 rounded-2xl font-bold text-sm text-white bg-white/5 border border-white/10 transition-all hover:bg-white/10 hover:scale-[1.02]">
+            <span>View Source Code</span>
+            <GithubIcon className="w-4 h-4" />
           </a>
         </div>
+
       </div>
     </motion.div>
   );
 };
 
 const Projects = () => {
-  const sectionRef = useRef(null);
-  const trackRef = useRef(null);
+  const containerRef = useRef(null);
 
   useLayoutEffect(() => {
     const mm = gsap.matchMedia();
 
     mm.add("(min-width: 1024px)", () => {
-      const section = sectionRef.current;
-      const track = trackRef.current;
-      if (!section || !track) return;
-
-      const totalScrollWidth = track.scrollWidth - window.innerWidth;
-
-      gsap.to(track, {
-        x: -totalScrollWidth,
-        ease: "none",
-        scrollTrigger: {
-          trigger: section,
-          start: "top top",
-          end: () => `+=${totalScrollWidth}`,
+      // Create the deck stacking effect
+      const cards = gsap.utils.toArray('.deck-card');
+      
+      cards.forEach((card, index) => {
+        ScrollTrigger.create({
+          trigger: card,
+          start: `top ${12 + (index * 4)}vh`, // Each card pins slightly lower than the last
+          endTrigger: containerRef.current,
+          end: `bottom bottom`,
           pin: true,
-          scrub: 1,
+          pinSpacing: false, // Prevents pushing other elements down, causing them to overlap
           invalidateOnRefresh: true,
-          anticipatePin: 1,
-        }
+        });
       });
     });
 
@@ -210,10 +189,10 @@ const Projects = () => {
   }, []);
 
   return (
-    <section id="projects" ref={sectionRef} className="relative bg-brand-black z-10 overflow-hidden py-10 lg:py-0">
+    <section id="projects" ref={containerRef} className="relative bg-brand-black z-10 py-16 lg:py-32">
 
       {/* Header */}
-      <div className="px-6 lg:px-20 pt-20 pb-10">
+      <div className="px-6 lg:px-20 max-w-7xl mx-auto mb-16 lg:mb-24 relative z-50">
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -227,21 +206,23 @@ const Projects = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.15 }}
-          className="text-3xl md:text-5xl lg:text-6xl font-heading font-bold text-white"
+          className="text-3xl md:text-5xl lg:text-7xl font-heading font-bold text-white"
         >
           Premium Case Studies.
         </motion.h3>
       </div>
 
-      {/* Track */}
-      <div
-        ref={trackRef}
-        className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20 px-6 lg:px-20 pb-24 lg:pb-20 pt-4 w-full lg:w-max"
-      >
-        {projects.map((project) => (
-          <ProjectCard key={project.id} project={project} />
+      {/* Vertical Stacking Deck */}
+      <div className="flex flex-col items-center gap-16 lg:gap-[40vh] px-6 lg:px-20 w-full relative pb-[15vh]">
+        {projects.map((project, index) => (
+          <div 
+            key={project.id} 
+            className="deck-card w-full flex justify-center origin-top"
+            style={{ zIndex: index + 10 }}
+          >
+            <ProjectCard project={project} />
+          </div>
         ))}
-        <div className="hidden lg:block w-40 shrink-0" />
       </div>
 
     </section>
