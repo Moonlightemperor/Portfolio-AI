@@ -50,7 +50,7 @@ const Hero = () => {
           ))}
         </h1>
 
-        {/* CTA Buttons - Removed GSAP classes to ensure they stay visible */}
+        {/* CTA Buttons - */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-12 opacity-100">
           <a
             href="#projects"
